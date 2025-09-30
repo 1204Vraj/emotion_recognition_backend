@@ -6,3 +6,4 @@ pillow
 opencv-python-headless
 requests
 numpy
+python-multipart
