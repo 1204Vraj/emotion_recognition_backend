@@ -1,4 +1,3 @@
-# app.py
 import torch
 import torch.nn as nn
 from torchvision import models, transforms
@@ -7,6 +6,7 @@ import cv2
 import numpy as np
 import requests
 from fastapi import FastAPI, UploadFile, File
+from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 
 # ------------------------------
@@ -52,9 +52,18 @@ def detect_face(img_array):
     return face_img
 
 # ------------------------------
-# 4. FastAPI App
+# 4. FastAPI App + CORS
 # ------------------------------
 app = FastAPI()
+
+# Allow frontend (Vite) to access backend
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # or ["http://localhost:5173"] if you want to restrict
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.post("/predict")
 async def predict_emotion(file: UploadFile = File(...)):
